@@ -1,0 +1,77 @@
+from collections import deque
+
+class VacuumCleaner:
+    def __init__(self, grid):
+        self.grid = grid
+        self.rows = len(grid)
+        self.cols = len(grid[0])
+        self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # Right, Left, Down, Up
+
+    def print_grid(self, current_state):
+        for row in current_state:
+            print(row)
+        print()
+
+    def is_valid_move(self, row, col):
+        return 0 <= row < self.rows and 0 <= col < self.cols and self.grid[row][col] != 'O'
+
+    def move(self, current_state, action):
+        current_row, current_col = current_state
+        new_row, new_col = current_row + self.directions[action][0], current_col + self.directions[action][1]
+
+        if self.is_valid_move(new_row, new_col):
+            return new_row, new_col
+        else:
+            return current_row, current_col
+
+    def clean(self, current_state):
+        row, col = current_state
+        self.grid[row][col] = 'C'  # Mark the cell as clean
+
+    def is_goal_state(self):
+        for row in self.grid:
+            if 'D' in row:
+                return False
+        return True
+
+    def bfs_search(self, start_state):
+        queue = deque([(start_state, [])])  # (state, actions)
+        visited = set()
+
+        while queue:
+            current_state, actions = queue.popleft()
+
+            if current_state not in visited:
+                print("Current State:")
+                self.print_grid(current_state)
+
+                if self.is_goal_state():
+                    print("Goal state reached!")
+                    print("Sequence of Actions:", actions)
+                    return
+
+                visited.add(current_state)
+
+                for action in range(len(self.directions) + 1):  # Including the clean action
+                    if action == len(self.directions):
+                        new_state = current_state
+                        new_actions = actions + ['Clean']
+                    else:
+                        new_state = self.move(current_state, action)
+                        new_actions = actions + [f"Move {self.directions[action]}"]
+
+                    print(f"Action: {new_actions[-1]}")
+                    self.print_grid(new_state)
+
+                    queue.append((new_state, new_actions))
+
+if __name__ == "__main__":
+    # Example usage
+    initial_state = (0, 0)  # Starting position of the vacuum cleaner
+    grid = [['C', 'D', 'C', 'O'],
+            ['O', 'D', 'C', 'O'],
+            ['C', 'C', 'D', 'C'],
+            ['D', 'O', 'O', 'C']]
+
+    cleaner = VacuumCleaner(grid)
+    cleaner.bfs_search(initial_state)
