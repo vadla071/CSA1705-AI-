@@ -1,0 +1,30 @@
+% Facts representing planets and their characteristics
+planet(mercury, rocky, 57.9).
+planet(venus, rocky, 108.2).
+planet(earth, rocky, 149.6).
+planet(mars, rocky, 227.9).
+planet(jupiter, gas_giant, 778.5).
+planet(saturn, gas_giant, 1433.5).
+planet(uranus, ice_giant, 2872.5).
+planet(neptune, ice_giant, 4495.1).
+
+% Query to find planets of a specific type
+planets_of_type(Type, Planets) :-
+    findall(Name, planet(Name, Type, _), Planets).
+
+% Query to find planets closer than a given distance
+planets_closer_than(Distance, Planets) :-
+    findall(Name, planet(Name, _, D), D < Distance, Planets).
+
+% Example queries:
+% To find rocky planets:
+% ?- planets_of_type(rocky, RockyPlanets).
+
+% To find planets closer than 200 units:
+% ?- planets_closer_than(200, ClosePlanets).
+
+
+yes
+| ?- planets_of_type(rocky, RockyPlanets).
+
+RockyPlanets = [mercury,venus,earth,mars]

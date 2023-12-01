@@ -1,0 +1,27 @@
+% Define Towers of Hanoi predicate
+hanoi(1, Source, Target, _, Moves) :-
+    format('Move disk 1 from ~w to ~w~n', [Source, Target]),
+    Moves = 1.
+hanoi(N, Source, Target, Auxiliary, Moves) :-
+    N > 1,
+    N1 is N - 1,
+    hanoi(N1, Source, Auxiliary, Target, Moves1),
+    format('Move disk ~w from ~w to ~w~n', [N, Source, Target]),
+    hanoi(N1, Auxiliary, Target, Source, Moves2),
+    Moves is Moves1 + Moves2 + 1.
+
+% Example usage:
+% To solve Towers of Hanoi for 3 disks from source 'A' to target 'C' using auxiliary 'B':
+% ?- hanoi(3, 'A', 'C', 'B', Moves).
+
+yes
+| ?- hanoi(3, 'A', 'C', 'B', Moves).
+Move disk 1 from A to C
+Move disk 2 from A to B
+Move disk 1 from C to B
+Move disk 3 from A to C
+Move disk 1 from B to A
+Move disk 2 from B to C
+Move disk 1 from A to C
+
+Moves = 7 ?
