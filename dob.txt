@@ -1,0 +1,19 @@
+% Facts representing the database
+dob(john, date(1990, 5, 15)).
+dob(susan, date(1985, 8, 23)).
+dob(mary, date(1995, 2, 10)).
+dob(peter, date(1980, 11, 7)).
+
+% Query to find the date of birth for a given person
+get_dob(Name, DateOfBirth) :-
+    dob(Name, DateOfBirth).
+
+% Query to find people born in a specific year
+born_in_year(Year, People) :-
+    findall(Name, (dob(Name, Date), Date = date(Year, _, _)), People).
+
+
+| ?- get_dob(Name,DateOfBirth).
+
+DateOfBirth = date(1990,5,15)
+Name = john ?
